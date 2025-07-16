@@ -648,9 +648,11 @@
 
       const data = await response.json();
 
-      const aiMessage = document.createElement("div");
-      aiMessage.className = "message ai-message";
-      aiMessage.innerText = data.result || "❌ No se recibió respuesta del bot.";
+     const aiMessage = document.createElement("div");
+aiMessage.className = "message ai-message";
+aiMessage.innerText = data.result || "❌ No se recibió respuesta del bot.";
+messagesContainer.appendChild(aiMessage);
+
       messagesContainer.appendChild(aiMessage);
 
     } catch (error) {
