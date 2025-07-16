@@ -758,36 +758,6 @@ messagesContainer.appendChild(aiMessage);
             }
         }
 
-        // Chat funcionalidad
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            
-            if (message === '') return;
-            
-            const chatMessages = document.getElementById('chat-messages');
-            
-            // Agregar mensaje del usuario
-            const userMessage = document.createElement('div');
-            userMessage.className = 'message user-message';
-            userMessage.textContent = message;
-            chatMessages.appendChild(userMessage);
-            
-            // Simular respuesta de IA
-            setTimeout(() => {
-                const aiMessage = document.createElement('div');
-                aiMessage.className = 'message ai-message';
-                aiMessage.innerHTML = getAIResponse(message);
-                chatMessages.appendChild(aiMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
-            
-            input.value = '';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function getAIResponse(message) {
-            const responses = {
                 'frenos': '🔧 Para diagnóstico de frenos, revisa: 1) Nivel de líquido de frenos, 2) Espesor de pastillas, 3) Estado de discos. Si escuchas chirridos, probablemente necesites cambiar las pastillas.',
                 'motor': '🔧 Para problemas de motor, verifica: 1) Códigos de error con scanner OBD, 2) Niveles de fluidos, 3) Filtros de aire y combustible. ¿Tienes algún síntoma específico?',
                 'transmision': '🔧 Para problemas de transmisión, revisa: 1) Nivel y color del fluido ATF, 2) Códigos de error, 3) Comportamiento en cambios. Un fluido oscuro puede indicar problemas.',
