@@ -37,7 +37,7 @@
       input.value = "";
 
       try {
-        const response = await fetch("https://rrkekpsgwiuiswggfjek.supabase.co/functions/v1/chat-gpt", {
+        const response = await fetch("https://api.escannercheck.com/chat-gpt", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt: prompt })
