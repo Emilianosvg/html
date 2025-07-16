@@ -637,9 +637,8 @@
     input.value = "";
 
     try {
-      const response = await fetch("https://rrkkepsgwiusiwgqfjek.supabase.co/functions/v1/chat-gpt", {
+const response = await fetch("https://rrkkepsgwiusiwgqfjek.supabase.co/functions/v1/chat-gpt", {
   method: "POST",
-  mode: "cors",
   headers: {
     "Content-Type": "application/json"
   },
