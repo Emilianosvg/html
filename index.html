@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Técnica Automotriz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .chat-header h2 {
+            color: #2c3e50;
+            margin-left: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fafbfc;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 85%;
+            font-size: 0.95rem;
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-message {
+            background: #ffffff;
+            color: #2c3e50;
+            border: 1px solid #e1e8ed;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .system-message {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            font-style: italic;
+            text-align: center;
+            margin: 0 auto;
+            max-width: 90%;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-button.vin {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        .action-button.report {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #667eea;
+        }
+
+        .chat-input button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-1px);
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .agenda-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: #fafbfc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .agenda-item:hover {
+            background: #f1f3f4;
+            transform: translateX(2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 8% auto;
+            padding: 35px;
+            border-radius: 12px;
+            width: 85%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: -10px;
+        }
+
+        .close:hover {
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .vehicle-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        .vehicle-info h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .vehicle-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-size: 0.9rem;
+        }
+
+        .detail-item strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .stat-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stat-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .stat-urgent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-revenue {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .info-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .chat-controls {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Gestión Técnica Automotriz</h1>
+            <div class="info-bar">
+                <div class="info-item">
+                    📅 <span id="current-date"></span>
+                </div>
+                <div class="info-item">
+                    🕒 <span id="current-time"></span>
+                </div>
+                <div class="info-item">
+                    🌡️ <span id="weather">22°C - Despejado</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <span style="font-size: 24px;">🤖</span>
+                <h2>Asistente Técnico Especializado</h2>
+            </div>
+            
+            <div class="chat-controls">
+                <button class="action-button vin" onclick="openVinModal()">
+                    Consultar VIN
+                </button>
+                <button class="action-button report" onclick="openReportModal()">
+                    Generar Informe Técnico
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai-message">
+                    Bienvenido al Sistema de Gestión Técnica Automotriz. Soy su asistente especializado en diagnóstico y reparación vehicular. Puedo proporcionarle información técnica detallada, procedimientos de reparación, especificaciones del fabricante, recomendaciones de videos instructivos y enlaces a recursos técnicos relevantes. ¿En qué puedo asistirle hoy?
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Ingrese su consulta técnica...">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            <div class="card">
+                <h3>Agenda de Servicios</h3>
+                <div class="agenda-item">
+                    <div>
+                        <strong>Honda Civic 2018</strong><br>
+                        <small>Mantenimiento preventivo programado</small>
+                    </div>
+                    <div style="font-weight: 600;">09:00</div>
+                </div>
+                <div class="agenda-item">
+                    <div>
+                        <strong>Ford Focus 2020</strong><br>
+                        <small>Diagnóstico sistema de frenos</small>
+                    </div>
+                    <div style="font-weight: 600;">11:30</div>
+                </div>
+                <div class="agenda-item">
+                    <div>
+                        <strong>Chevrolet Cruze 2019</strong><br>
+                        <small>Reparación transmisión automática</small>
+                    </div>
+                    <div style="font-weight: 600;">14:00</div>
+                </div>
+                <div class="agenda-item">
+                    <div>
+                        <strong>Toyota Corolla 2021</strong><br>
+                        <small>Inspección técnica vehicular</small>
+                    </div>
+                    <div style="font-weight: 600;">16:00</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Indicadores de Rendimiento</h3>
+                <div class="stats-grid">
+                    <div class="stat-item stat-completed">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Servicios Completados</div>
+                    </div>
+                    <div class="stat-item stat-progress">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">En Proceso</div>
+                    </div>
+                    <div class="stat-item stat-urgent">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Prioridad Alta</div>
+                    </div>
+                    <div class="stat-item stat-revenue">
+                        <div class="stat-value">$2,450</div>
+                        <div class="stat-label">Ingresos del Día</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para VIN -->
+    <div id="vinModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVinModal()">&times;</span>
+            <h2>Consulta de Información Vehicular</h2>
+            <div class="form-group">
+                <label for="vin-input">Número de Identificación Vehicular (VIN):</label>
+                <input type="text" id="vin-input" maxlength="17" placeholder="Ingrese el VIN de 17 caracteres">
+            </div>
+            <button class="submit-btn" onclick="searchVIN()">Consultar Información</button>
+            <div id="vin-results"></div>
+        </div>
+    </div>
+
+    <!-- Modal para Informe Técnico -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportModal()">&times;</span>
+            <h2>Generación de Informe Técnico</h2>
+            <div class="form-group">
+                <label for="vehicle-info">Información del Vehículo:</label>
+                <input type="text" id="vehicle-info" placeholder="Marca, modelo y año del vehículo">
+            </div>
+            <div class="form-group">
+                <label for="problem-description">Descripción del Problema:</label>
+                <textarea id="problem-description" placeholder="Detalle los síntomas y problemas identificados..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="technician-name">Técnico Responsable:</label>
+                <input type="text" id="technician-name" placeholder="Nombre del técnico asignado">
+            </div>
+            <button class="submit-btn" onclick="createReport()">Generar Informe</button>
+            <div id="report-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de VINs para demostración
+        const vinDatabase = {
+            "1HGBH41JXMN109186": {
+                marca: "Honda",
+                modelo: "Civic",
+                año: 2018,
+                motor: "1.5L Turbo I4",
+                transmision: "CVT Automática",
+                color: "Azul Metálico",
+                ecu: "Honda PGM-FI ECU (37820-5AA-A04)",
+                pais: "Estados Unidos",
+                planta: "Greensburg, Indiana",
+                cilindrada: "1498 cc",
+                combustible: "Gasolina"
+            },
+            "WVWZZZ1JZ2W386752": {
+                marca: "Volkswagen",
+                modelo: "Jetta",
+                año: 2019,
+                motor: "1.4L TSI Turbo",
+                transmision: "Manual 6 velocidades",
+                color: "Blanco Puro",
+                ecu: "Bosch MED17.5.25 (04E906027CQ)",
+                pais: "México",
+                planta: "Puebla",
+                cilindrada: "1395 cc",
+                combustible: "Gasolina"
+            },
+            "3GNAXKEV8JL123456": {
+                marca: "Chevrolet",
+                modelo: "Equinox",
+                año: 2020,
+                motor: "1.5L Turbo I4",
+                transmision: "Automática 6 velocidades",
+                color: "Negro Ébano",
+                ecu: "GM E78 ECU (12681687)",
+                pais: "Estados Unidos",
+                planta: "Spring Hill, Tennessee",
+                cilindrada: "1490 cc",
+                combustible: "Gasolina"
+            },
+            "JTDKARFU0J3123789": {
+                marca: "Toyota",
+                modelo: "Corolla",
+                año: 2021,
+                motor: "2.0L Dynamic Force",
+                transmision: "CVT Automática",
+                color: "Rojo Barcelona",
+                ecu: "Toyota 89661-02S20 ECU",
+                pais: "Estados Unidos",
+                planta: "Blue Springs, Mississippi",
+                cilindrada: "1987 cc",
+                combustible: "Gasolina"
+            },
+            "1FA6P8TH5J5123456": {
+                marca: "Ford",
+                modelo: "Mustang",
+                año: 2020,
+                motor: "5.0L V8 Coyote",
+                transmision: "Manual 6 velocidades",
+                color: "Amarillo Triple",
+                ecu: "Ford PCM (JR3A-12A650-AUB)",
+                pais: "Estados Unidos",
+                planta: "Flat Rock, Michigan",
+                cilindrada: "4951 cc",
+                combustible: "Gasolina"
+            }
+        };
+
+        // Actualización de fecha y hora
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            };
+            const timeOptions = { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            
+            document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', dateOptions);
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('es-ES', timeOptions);
+        }
+
+        // Funcionalidad del chat
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            const chatMessages = document.getElementById('chat-messages');
+            
+            // Mensaje del usuario
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            chatMessages.appendChild(userMessage);
+            
+            // Respuesta del asistente
+            setTimeout(() => {
+                const aiMessage = document.createElement('div');
+                aiMessage.className = 'message ai-message';
+                aiMessage.innerHTML = generateTechnicalResponse(message);
+                chatMessages.appendChild(aiMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1200);
+            
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateTechnicalResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            const responses = {
+                'frenos': 'Para el diagnóstico del sistema de frenos, recomiendo verificar el nivel y calidad del líquido de frenos, inspeccionar el desgaste de pastillas y discos, y realizar una prueba de presión del sistema. Le sugiero consultar el video "Diagnóstico Completo de Frenos ABS" en YouTube y revisar el manual técnico del fabricante para especificaciones de torque.',
+                
+                'motor': 'Para problemas de motor, es fundamental realizar un diagnóstico con escáner OBD-II, verificar códigos de falla almacenados, y revisar parámetros en tiempo real. Examine filtros de aire y combustible, niveles de fluidos, y realice pruebas de compresión si es necesario. Recomiendo consultar foros especializados como MechanicAdvice para casos similares.',
+                
+                'transmision': 'El diagnóstico de transmisión requiere verificar el nivel y condición del fluido ATF, realizar pruebas de presión hidráulica, y analizar códigos de falla específicos. Un fluido oscuro o con olor a quemado indica problemas internos. Consulte videos técnicos sobre "Diagnóstico de Transmisión Automática" para procedimientos detallados.',
+                
+                'aceite': 'Para el cambio de aceite, utilice la viscosidad especificada por el fabricante, reemplace el filtro simultáneamente, y verifique el nivel después de 5 minutos de funcionamiento. Las especificaciones exactas se encuentran en el manual del propietario. Recomiendo revisar tutoriales técnicos sobre intervalos de mantenimiento específicos por marca.',
+                
+                'bateria': 'Para diagnóstico de batería, mida el voltaje en reposo (debe ser 12.6V), verifique la limpieza de terminales, y realice prueba de carga. Una batería con voltaje inferior a 12.4V requiere recarga o reemplazo. Consulte recursos técnicos sobre "Diagnóstico de Sistema de Carga" para procedimientos completos.',
+                
+                'suspension': 'El diagnóstico de suspensión incluye inspección visual de amortiguadores, resortes y componentes de dirección. Verifique desgaste de bujes, juego en rótulas, y alineación. Recomiendo consultar foros técnicos especializados y videos instructivos sobre "Diagnóstico de Suspensión" para su marca específica.',
+                
+                'aire acondicionado': 'Para el sistema de aire acondicionado, verifique presión del refrigerante, funcionamiento del compresor, y estado del filtro de cabina. Realice pruebas de temperatura de salida y verifique fugas con detector UV. Consulte manuales técnicos específicos y videos sobre "Diagnóstico de A/C Automotriz".',
+                
+                'default': 'Entiendo su consulta técnica. Para brindarle la asistencia más precisa, le recomiendo especificar el sistema particular que requiere diagnóstico. Puedo proporcionarle procedimientos detallados, especificaciones técnicas, y recomendar recursos educativos específicos como videos instructivos de YouTube y foros técnicos especializados para su situación particular.'
+            };
+            
+            for (const keyword in responses) {
+                if (lowerMessage.includes(keyword)) {
+                    return responses[keyword];
+                }
+            }
+            
+            return responses.default;
+        }
+
+        // Gestión de modales
+        function openVinModal() {
+            document.getElementById('vinModal').style.display = 'block';
+        }
+
+        function closeVinModal() {
+            document.getElementById('vinModal').style.display = 'none';
+            document.getElementById('vin-results').innerHTML = '';
+            document.getElementById('vin-input').value = '';
+        }
+
+        function openReportModal() {
+            document.getElementById('reportModal').style.display = 'block';
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').style.display = 'none';
+            document.getElementById('report-results').innerHTML = '';
+            document.getElementById('vehicle-info').value = '';
+            document.getElementById('problem-description').value = '';
+            document.getElementById('technician-name').value = '';
+        }
+
+        // Búsqueda de información VIN
+        function searchVIN() {
+            const vin = document.getElementById('vin-input').value.trim().toUpperCase();
+            const resultsDiv = document.getElementById('vin-results');
+            
+            if (vin.length !== 17) {
+                resultsDiv.innerHTML = '<div style="color: #dc3545; margin-top: 20px; padding: 15px; background: #f8d7da; border-radius: 6px;">El número VIN debe contener exactamente 17 caracteres alfanuméricos.</div>';
+                return;
+            }
+            
+            const vehicleData = vinDatabase[vin];
+            
+            if (vehicleData) {
+                resultsDiv.innerHTML = `
+                    <div class="vehicle-info">
+                        <h4>Información Vehicular Encontrada</h4>
+                        <div class="vehicle-details">
+                            <div class="detail-item">
+                                <strong>Marca:</strong> ${vehicleData.marca}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Modelo:</strong> ${vehicleData.modelo}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Año:</strong> ${vehicleData.año}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Motor:</strong> ${vehicleData.motor}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Transmisión:</strong> ${vehicleData.transmision}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Color:</strong> ${vehicleData.color}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Cilindrada:</strong> ${vehicleData.cilindrada}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Combustible:</strong> ${vehicleData.combustible}
+                            </div>
+                            <div class="detail-item">
+                                <strong>ECU:</strong> ${vehicleData.ecu}
+                            </div>
+                            <div class="detail-item">
+                                <strong>País de Origen:</strong> ${vehicleData.pais}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Planta de Manufactura:</strong> ${vehicleData.planta}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultsDiv.innerHTML = '<div style="color: #dc3545; margin-top: 20px; padding: 15px; background: #f8d7da; border-radius: 6px;">El número VIN ingresado no se encuentra en la base de datos del sistema.</div>';
+            }
+        }
+
+        // Generación de informe técnico
+        function createReport() {
+            const vehicle = document.getElementById('vehicle-info').value.trim();
+            const problem = document.getElementById('problem-description').value.trim();
+            const technician = document.getElementById('technician-name').value.trim();
+            const resultsDiv = document.getElementById('report-results');
+            
+            if (!vehicle || !problem || !technician) {
+                resultsDiv.innerHTML = '<div style="color: #dc3545; margin-top: 20px; padding: 15px; background: #f8d7da; border-radius: 6px;">Todos los campos son obligatorios para generar el informe técnico.</div>';
+                return;
+            }
+            
+            const reportNumber = 'RPT-' + Date.now().toString().slice(-6);
+            const currentDate = new Date
