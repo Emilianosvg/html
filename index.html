@@ -646,8 +646,8 @@
   body: JSON.stringify({ prompt: message })
 });
 
-
-      const data = await response.json();
+const data = await response.json();
+console.log(data); // <- esto te permite ver qué llega
 
      const aiMessage = document.createElement("div");
 aiMessage.className = "message ai-message";
