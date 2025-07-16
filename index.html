@@ -650,7 +650,7 @@ console.log(data); // <- esto te permite ver qué llega
 
      const aiMessage = document.createElement("div");
 aiMessage.className = "message ai-message";
-aiMessage.innerText = data.reply || "❌ No se recibió respuesta del bot.";
+aiMessage.innerText = data.result || "❌";
 messagesContainer.appendChild(aiMessage);
 
       messagesContainer.appendChild(aiMessage);
